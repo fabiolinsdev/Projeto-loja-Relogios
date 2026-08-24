@@ -34,7 +34,7 @@ export async function productsRoutes(app: FastifyInstance) {
     return product;
   });
 
-  app.post('/products', async (request, reply) => {
+    app.post('/products', async (request, reply) => {
     const result = createProductSchema.safeParse(request.body);
 
     if (!result.success) {

@@ -8,5 +8,6 @@ export const createProductSchema = z.object({
   categoryId: z.string().min(1),
 });
 
+export const updateProductSchema = createProductSchema.partial();
 
 export type CreateProductInput = z.infer<typeof createProductSchema>;

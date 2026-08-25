@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
 import { productsRoutes } from './routes/products';
+import { usersRoutes } from './routes/users';
 
 const app = Fastify({
   logger: true,
@@ -12,6 +13,7 @@ app.get('/', async () => {
 });
 
 app.register(productsRoutes);
+app.register(usersRoutes);
 
 app.listen({
   port: 3333,

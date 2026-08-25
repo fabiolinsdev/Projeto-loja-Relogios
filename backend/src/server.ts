@@ -1,9 +1,12 @@
 import Fastify from 'fastify';
 import { productsRoutes } from './routes/products';
 import { usersRoutes } from './routes/users';
+import fastifyJwt from '@fastify/jwt';
 
-const app = Fastify({
-  logger: true,
+const app = Fastify();
+
+app.register(fastifyJwt, {
+  secret: process.env.JWT_SECRET!,
 });
 
 app.get('/', async () => {

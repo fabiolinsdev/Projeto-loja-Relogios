@@ -71,6 +71,30 @@ export async function productsRoutes(app: FastifyInstance) {
         return reply.status(200).send(updatedProduct);
     });
 
+    app.delete('/products/:id', async (request, reply) => {
+        const { id } = request.params as { id: string };
+
+        const product = await prisma.product.findUnique({
+            where: {
+                id,
+            },
+        });
+
+        if (!product) {
+            return reply.status(404).send({
+                message: 'Produto não encontrado',
+            });
+        }
+
+        await prisma.product.delete({
+            where: {
+                id,
+            },
+        });
+
+        return reply.status(204).send();
+    });
+
     app.post('/products', async (request, reply) => {
         const result = createProductSchema.safeParse(request.body);
 

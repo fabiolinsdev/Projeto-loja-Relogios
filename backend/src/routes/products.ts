@@ -122,7 +122,10 @@ export async function productsRoutes(app: FastifyInstance) {
             }
 
             const product = await prisma.product.create({
-                data: result.data,
+                data: {
+                    ...result.data,
+                    userId: request.user.id,
+                },
                 include: {
                     category: true,
                 },

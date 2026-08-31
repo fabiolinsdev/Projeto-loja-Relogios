@@ -8,11 +8,12 @@ export async function authenticate(
   try {
     await request.jwtVerify();
 
-  } catch {
+  } catch (error) {
+
     return reply.status(401).send({
-      message: 'Não autorizado',
+        message: 'Não autorizado',
     });
-  }
+}
 }
 
 

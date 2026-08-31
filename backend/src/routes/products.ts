@@ -52,9 +52,10 @@ export async function productsRoutes(app: FastifyInstance) {
                 });
             }
 
-            const product = await prisma.product.findUnique({
+            const product = await prisma.product.findFirst({
                 where: {
                     id,
+                    userId: request.user.id,
                 },
             });
 
@@ -85,9 +86,10 @@ export async function productsRoutes(app: FastifyInstance) {
         async (request, reply) => {
             const { id } = request.params as { id: string };
 
-            const product = await prisma.product.findUnique({
+            const product = await prisma.product.findFirst({
                 where: {
                     id,
+                    userId: request.user.id,
                 },
             });
 

@@ -2,8 +2,12 @@ import Fastify from 'fastify';
 import { productsRoutes } from './routes/products';
 import { usersRoutes } from './routes/users';
 import fastifyJwt from '@fastify/jwt';
+import cors from '@fastify/cors'
 
 const app = Fastify();
+app.register(cors, {
+  origin: 'http://localhost:5173',
+});
 
 app.register(fastifyJwt, {
   secret: process.env.JWT_SECRET!,

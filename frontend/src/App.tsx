@@ -18,7 +18,7 @@ type Product = {
 
 function App() {
   const [products, setProducts] = useState<Product[]>([])
-  
+
   useEffect(() => {
     fetch('http://localhost:3333/products')
       .then((response) => response.json())
@@ -34,6 +34,7 @@ function App() {
       {products.map((product) => (
         <div key={product.id}>
           <h2>{product.name}</h2>
+          <p>Categoria: {product.category.name}</p>
           <p>Preço: R$ {product.price}</p>
           <p>Estoque: {product.stock}</p>
         </div>

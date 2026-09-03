@@ -43,7 +43,7 @@ function App() {
               width="200"
             />
           )}
-          <p>Preço: R$ {product.price}</p>
+          <p>Preço: R$ {product.price.toFixed(2)}</p>
           <p>Estoque: {product.stock}</p>
         </div>
       ))}

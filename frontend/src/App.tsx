@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
+type Category = {
+  id: string
+  name: string
+}
+
 type Product = {
   id: string
   name: string
@@ -8,11 +13,12 @@ type Product = {
   price: number
   stock: number
   imageUrl: string | null
+  category: Category
 }
 
 function App() {
   const [products, setProducts] = useState<Product[]>([])
-
+  
   useEffect(() => {
     fetch('http://localhost:3333/products')
       .then((response) => response.json())

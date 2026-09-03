@@ -43,7 +43,12 @@ function App() {
               width="200"
             />
           )}
-          <p>Preço: R$ {product.price.toFixed(2)}</p>
+          <p>
+            Preço: {product.price.toLocaleString('pt-BR', {
+              style: 'currency',
+              currency: 'BRL',
+            })}
+          </p>
           <p>Estoque: {product.stock}</p>
         </div>
       ))}

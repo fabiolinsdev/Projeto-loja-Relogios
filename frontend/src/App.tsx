@@ -36,6 +36,13 @@ function App() {
           <h2>{product.name}</h2>
           <p>Categoria: {product.category.name}</p>
           <p>{product.description}</p>
+          {product.imageUrl && (
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              width="200"
+            />
+          )}
           <p>Preço: R$ {product.price}</p>
           <p>Estoque: {product.stock}</p>
         </div>

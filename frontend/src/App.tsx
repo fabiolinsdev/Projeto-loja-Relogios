@@ -35,6 +35,7 @@ function App() {
         <div key={product.id}>
           <h2>{product.name}</h2>
           <p>Categoria: {product.category.name}</p>
+          <p>{product.description}</p>
           <p>Preço: R$ {product.price}</p>
           <p>Estoque: {product.stock}</p>
         </div>

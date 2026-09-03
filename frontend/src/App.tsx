@@ -49,7 +49,11 @@ function App() {
               currency: 'BRL',
             })}
           </p>
-          <p>Estoque: {product.stock}</p>
+          <p>
+            {product.stock > 0
+              ? `Estoque: ${product.stock}`
+              : 'Produto sem estoque'}
+          </p>
         </div>
       ))}
     </>

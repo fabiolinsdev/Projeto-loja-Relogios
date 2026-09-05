@@ -31,6 +31,8 @@ function App() {
     <>
       <h1>Produtos</h1>
 
+      <div key={product.id} className="product-card"></div>
+
       {products.map((product) => (
         <div key={product.id}>
           <h2>{product.name}</h2>

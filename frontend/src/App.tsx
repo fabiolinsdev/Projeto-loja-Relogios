@@ -31,10 +31,10 @@ function App() {
     <>
       <h1>Produtos</h1>
 
-      <div key={product.id} className="product-card"></div>
 
       {products.map((product) => (
-        <div key={product.id}>
+        <div key={product.id} className="product-card">
+          <strong>TESTE DO CARD</strong>
           <h2>{product.name}</h2>
           <p>Categoria: {product.category.name}</p>
           <p>{product.description}</p>

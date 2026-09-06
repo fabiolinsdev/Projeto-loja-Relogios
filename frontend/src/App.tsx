@@ -37,6 +37,7 @@ function App() {
       const existingItem = currentCart.find(
         (item) => item.id === product.id
       )
+      
 
       if (existingItem) {
         return currentCart.map((item) =>
@@ -49,6 +50,39 @@ function App() {
       return [...currentCart, { ...product, quantity: 1 }]
     })
   }
+
+  function increaseQuantity(productId: string) {
+        setCart((currentCart) =>
+          currentCart.map((item) =>
+            item.id === productId
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          )
+        )
+      }
+
+      function decreaseQuantity(productId: string) {
+        setCart((currentCart) =>
+          currentCart
+            .map((item) =>
+              item.id === productId
+                ? { ...item, quantity: item.quantity - 1 }
+                : item
+            )
+            .filter((item) => item.quantity > 0)
+        )
+      }
+
+      function removeFromCart(productId: string) {
+        setCart((currentCart) =>
+          currentCart.filter((item) => item.id !== productId)
+        )
+      }
+
+  const cartTotal = cart.reduce(
+    (total, item) => total + item.price * item.quantity,
+    0
+  )
 
   return (
     <>
@@ -78,6 +112,8 @@ function App() {
                 style: 'currency',
                 currency: 'BRL',
               })}
+
+
             </p>
 
             <p>
@@ -94,21 +130,57 @@ function App() {
             </button>
           </div>
         ))}
+
+
       </div>
       <h2>Carrinho</h2>
 
-{cart.length === 0 ? (
-  <p>Seu carrinho está vazio.</p>
-) : (
-  <div>
-    {cart.map((item) => (
-      <div key={item.id}>
-        <strong>{item.name}</strong>
-        <span> — Quantidade: {item.quantity}</span>
-      </div>
-    ))}
-  </div>
-)}
+      {cart.length === 0 ? (
+        <p>Seu carrinho está vazio.</p>
+      ) : (
+        <div>
+          {cart.map((item) => (
+            <div key={item.id}>
+              <strong>{item.name}</strong>
+
+              <div>
+                <button
+                  type="button"
+                  onClick={() => decreaseQuantity(item.id)}
+                >
+                  −
+                </button>
+
+                <span> {item.quantity} </span>
+
+                <button
+                  type="button"
+                  onClick={() => increaseQuantity(item.id)}
+                >
+                  +
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => removeFromCart(item.id)}
+                >
+                  Remover
+                </button>
+              </div>
+            </div>
+          ))}
+
+
+          <p>
+            <strong>
+              Total: {cartTotal.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+              })}
+            </strong>
+          </p>
+        </div>
+      )}
     </>
   )
 }

@@ -23,6 +23,8 @@ type CartItem = Product & {
 function App() {
   const [products, setProducts] = useState<Product[]>([])
   const [cart, setCart] = useState<CartItem[]>([])
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   useEffect(() => {
     fetch('http://localhost:3333/products')
@@ -37,7 +39,7 @@ function App() {
       const existingItem = currentCart.find(
         (item) => item.id === product.id
       )
-      
+
 
       if (existingItem) {
         return currentCart.map((item) =>
@@ -52,32 +54,80 @@ function App() {
   }
 
   function increaseQuantity(productId: string) {
-        setCart((currentCart) =>
-          currentCart.map((item) =>
-            item.id === productId
-              ? { ...item, quantity: item.quantity + 1 }
-              : item
-          )
-        )
-      }
+    setCart((currentCart) =>
+      currentCart.map((item) =>
+        item.id === productId
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      )
+    )
+  }
 
-      function decreaseQuantity(productId: string) {
-        setCart((currentCart) =>
-          currentCart
-            .map((item) =>
-              item.id === productId
-                ? { ...item, quantity: item.quantity - 1 }
-                : item
-            )
-            .filter((item) => item.quantity > 0)
+  function decreaseQuantity(productId: string) {
+    setCart((currentCart) =>
+      currentCart
+        .map((item) =>
+          item.id === productId
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
         )
-      }
+        .filter((item) => item.quantity > 0)
+    )
+  }
 
-      function removeFromCart(productId: string) {
-        setCart((currentCart) =>
-          currentCart.filter((item) => item.id !== productId)
-        )
-      }
+  function removeFromCart(productId: string) {
+    setCart((currentCart) =>
+      currentCart.filter((item) => item.id !== productId)
+    )
+  }
+
+  async function login() {
+    const response = await fetch('http://localhost:3333/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      alert(data.message)
+      return
+    }
+
+    localStorage.setItem('token', data.token)
+
+    alert('Login realizado com sucesso!')
+  }
+
+  async function login() {
+    const response = await fetch('http://localhost:3333/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      alert(data.message)
+      return
+    }
+
+    localStorage.setItem('token', data.token)
+
+    alert('Login realizado com sucesso!')
+  }
 
   const cartTotal = cart.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -87,6 +137,28 @@ function App() {
   return (
     <>
       <h2>Carrinho: {cart.length} produto(s)</h2>
+
+      <h1>Login</h1>
+
+      <div>
+        <input
+          type="email"
+          placeholder="E-mail"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+        />
+
+        <input
+          type="password"
+          placeholder="Senha"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+        />
+
+        <button type="button" onClick={login}>
+          Entrar
+        </button>
+      </div>
 
       <h1>Produtos</h1>
 

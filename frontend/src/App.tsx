@@ -25,14 +25,19 @@ function App() {
   const [cart, setCart] = useState<CartItem[]>([])
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const token = localStorage.getItem('token')
 
   useEffect(() => {
-    fetch('http://localhost:3333/products')
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data)
-      })
-  }, [])
+  fetch('http://localhost:3333/products', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      setProducts(data)
+    })
+}, [])
 
   function addToCart(product: Product) {
     setCart((currentCart) => {

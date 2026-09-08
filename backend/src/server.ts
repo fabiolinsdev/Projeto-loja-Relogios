@@ -7,6 +7,7 @@ import cors from '@fastify/cors'
 const app = Fastify();
 app.register(cors, {
   origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
 });
 
 app.register(fastifyJwt, {

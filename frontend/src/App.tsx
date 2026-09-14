@@ -346,7 +346,9 @@ function App() {
 
       {token && (
         <div>
-          <h1>Cadastrar produto</h1>
+          <h1>
+            {editingProductId ? 'Editar produto' : 'Cadastrar produto'}
+          </h1>
 
           <input
             type="text"

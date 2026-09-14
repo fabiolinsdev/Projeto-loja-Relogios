@@ -13,6 +13,7 @@ type Product = {
   price: number
   stock: number
   imageUrl: string | null
+  categoryId: string
   category: Category
 }
 
@@ -34,6 +35,8 @@ function App() {
   const [productPrice, setProductPrice] = useState('')
   const [productStock, setProductStock] = useState('')
   const [productCategoryId, setProductCategoryId] = useState('')
+
+  const [editingProductId, setEditingProductId] = useState<string | null>(null)
 
   const [token, setToken] = useState(localStorage.getItem('token'))
 
@@ -153,6 +156,65 @@ function App() {
     setProductCategoryId('')
 
     setProducts((currentProducts) => [...currentProducts, data])
+  }
+
+  async function updateProduct() {
+
+
+    if (!editingProductId) {
+      return
+    }
+
+    const response = await fetch(
+      `http://localhost:3333/products/${editingProductId}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: productName,
+          description: productDescription,
+          price: Number(productPrice),
+          stock: Number(productStock),
+          categoryId: productCategoryId,
+        }),
+      }
+
+    )
+
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      alert(data.message)
+      return
+    }
+
+    alert('Produto atualizado com sucesso!')
+
+    setProducts((currentProducts) =>
+      currentProducts.map((product) =>
+        product.id === editingProductId ? data : product
+      )
+    )
+
+    setEditingProductId(null)
+    setProductName('')
+    setProductDescription('')
+    setProductPrice('')
+    setProductStock('')
+    setProductCategoryId('')
+  }
+
+  function startEditingProduct(product: Product) {
+    setEditingProductId(product.id)
+    setProductName(product.name)
+    setProductDescription(product.description)
+    setProductPrice(String(product.price))
+    setProductStock(String(product.stock))
+    setProductCategoryId(product.categoryId)
   }
 
   async function deleteProduct(productId: string) {
@@ -325,8 +387,11 @@ function App() {
             </option>
           </select>
 
-          <button type="button" onClick={createProduct}>
-            Criar produto
+          <button
+            type="button"
+            onClick={editingProductId ? updateProduct : createProduct}
+          >
+            {editingProductId ? 'Salvar alterações' : 'Criar produto'}
           </button>
         </div>
       )}
@@ -370,6 +435,13 @@ function App() {
               disabled={product.stock === 0}
             >
               Adicionar ao carrinho
+            </button>
+
+            <button
+              type="button"
+              onClick={() => startEditingProduct(product)}
+            >
+              Editar produto
             </button>
 
             <button

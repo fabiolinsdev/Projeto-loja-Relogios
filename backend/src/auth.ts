@@ -11,9 +11,9 @@ export async function authenticate(
   } catch (error) {
 
     return reply.status(401).send({
-        message: 'Não autorizado',
-    });
-}
+      message: 'Não autorizado',
+    })
+  }
 }
 
 

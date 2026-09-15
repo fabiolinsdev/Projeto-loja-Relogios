@@ -3,8 +3,12 @@ import { productsRoutes } from './routes/products';
 import { usersRoutes } from './routes/users';
 import fastifyJwt from '@fastify/jwt';
 import cors from '@fastify/cors'
+import { ordersRoutes } from './routes/orders';
 
-const app = Fastify();
+const app = Fastify({
+
+});
+
 app.register(cors, {
   origin: 'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -20,6 +24,7 @@ app.get('/', async () => {
   };
 });
 
+app.register(ordersRoutes);
 app.register(productsRoutes);
 app.register(usersRoutes);
 

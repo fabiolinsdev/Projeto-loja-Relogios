@@ -74,7 +74,7 @@ function App() {
   function increaseQuantity(productId: string) {
     setCart((currentCart) =>
       currentCart.map((item) =>
-        item.id === productId
+        item.id === productId && item.quantity < item.stock
           ? { ...item, quantity: item.quantity + 1 }
           : item
       )

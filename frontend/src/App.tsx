@@ -21,9 +21,25 @@ type CartItem = Product & {
   quantity: number
 }
 
+type OrderItem = {
+  id: string
+  productId: string
+  quantity: number
+  price: number
+  product: Product
+}
+
+type Order = {
+  id: string
+  total: number
+  createdAt: string
+  items: OrderItem[]
+}
+
 function App() {
   const [products, setProducts] = useState<Product[]>([])
   const [cart, setCart] = useState<CartItem[]>([])
+  const [orders, setOrders] = useState<Order[]>([])
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [registerName, setRegisterName] = useState('')
@@ -42,16 +58,20 @@ function App() {
 
 
   useEffect(() => {
-    fetch('http://localhost:3333/products', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  fetch('http://localhost:3333/products', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      setProducts(data)
     })
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data)
-      })
-  }, [])
+}, [])
+
+useEffect(() => {
+  fetchOrders()
+}, [token])
 
   function addToCart(product: Product) {
     setCart((currentCart) => {
@@ -242,6 +262,26 @@ function App() {
     setCart([])
 
     alert('Pedido criado com sucesso!')
+  }
+
+  async function fetchOrders() {
+    if (!token) {
+      return
+    }
+
+    const response = await fetch('http://localhost:3333/orders', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
+    if (!response.ok) {
+      return
+    }
+
+    const data = await response.json()
+
+    setOrders(data)
   }
 
   function startEditingProduct(product: Product) {
@@ -547,8 +587,52 @@ function App() {
           >
             Finalizar compra
           </button>
-        </div>
+              </div>
       )}
+
+      <section>
+        <h2>Histórico de pedidos</h2>
+
+        {orders.length === 0 ? (
+          <p>Nenhum pedido encontrado.</p>
+        ) : (
+          orders.map((order) => (
+            <div key={order.id}>
+              <h3>
+                Pedido {order.id}
+              </h3>
+
+              <p>
+                Data:{' '}
+                {new Date(order.createdAt).toLocaleString('pt-BR')}
+              </p>
+
+              {order.items.map((item) => (
+                <div key={item.id}>
+                  <p>
+                    {item.product.name} — {item.quantity}x
+                  </p>
+                  <p>
+                    Preço: {item.price.toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })}
+                  </p>
+                </div>
+              ))}
+
+              <strong>
+                Total:{' '}
+                {order.total.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })}
+              </strong>
+            </div>
+          ))
+        )}
+      </section>
+      
     </>
   )
 }

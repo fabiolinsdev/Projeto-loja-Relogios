@@ -32,6 +32,7 @@ type OrderItem = {
 type Order = {
   id: string
   total: number
+  status: string
   createdAt: string
   items: OrderItem[]
 }
@@ -58,20 +59,20 @@ function App() {
 
 
   useEffect(() => {
-  fetch('http://localhost:3333/products', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      setProducts(data)
+    fetch('http://localhost:3333/products', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-}, [])
+      .then((response) => response.json())
+      .then((data) => {
+        setProducts(data)
+      })
+  }, [])
 
-useEffect(() => {
-  fetchOrders()
-}, [token])
+  useEffect(() => {
+    fetchOrders()
+  }, [token])
 
   function addToCart(product: Product) {
     setCart((currentCart) => {
@@ -587,7 +588,7 @@ useEffect(() => {
           >
             Finalizar compra
           </button>
-              </div>
+        </div>
       )}
 
       <section>
@@ -605,6 +606,10 @@ useEffect(() => {
               <p>
                 Data:{' '}
                 {new Date(order.createdAt).toLocaleString('pt-BR')}
+              </p>
+
+              <p>
+                Status: {order.status}
               </p>
 
               {order.items.map((item) => (
@@ -632,7 +637,7 @@ useEffect(() => {
           ))
         )}
       </section>
-      
+
     </>
   )
 }

@@ -3,6 +3,33 @@ import { prisma } from '../lib/prisma';
 import { authenticate } from '../auth';
 
 export async function ordersRoutes(app: FastifyInstance) {
+
+    app.get(
+        '/orders',
+        {
+            preHandler: authenticate,
+        },
+        async (request, reply) => {
+            const orders = await prisma.order.findMany({
+                where: {
+                    userId: request.user.id,
+                },
+                include: {
+                    items: {
+                        include: {
+                            product: true,
+                        },
+                    },
+                },
+                orderBy: {
+                    createdAt: 'desc',
+                },
+            });
+
+            return reply.send(orders);
+        }
+    );
+
     app.post(
         '/orders',
         {

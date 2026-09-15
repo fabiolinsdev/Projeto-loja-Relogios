@@ -208,6 +208,42 @@ function App() {
     setProductCategoryId('')
   }
 
+  async function createOrder() {
+    if (!token) {
+      alert('Você precisa estar logado para finalizar a compra.')
+      return
+    }
+
+    if (cart.length === 0) {
+      alert('O carrinho está vazio.')
+      return
+    }
+
+    const items = cart.map((item) => ({
+      productId: item.id,
+      quantity: item.quantity,
+    }))
+
+    const response = await fetch('http://localhost:3333/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ items }),
+    })
+
+    if (!response.ok) {
+      const data = await response.json()
+      alert(data.message || 'Erro ao criar pedido.')
+      return
+    }
+
+    setCart([])
+
+    alert('Pedido criado com sucesso!')
+  }
+
   function startEditingProduct(product: Product) {
     setEditingProductId(product.id)
     setProductName(product.name)
@@ -279,6 +315,8 @@ function App() {
     (total, item) => total + item.price * item.quantity,
     0
   )
+
+
 
   return (
     <>
@@ -502,6 +540,13 @@ function App() {
               })}
             </strong>
           </p>
+
+          <button
+            type="button"
+            onClick={createOrder}
+          >
+            Finalizar compra
+          </button>
         </div>
       )}
     </>

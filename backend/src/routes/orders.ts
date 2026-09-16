@@ -1,4 +1,5 @@
 import { FastifyInstance } from 'fastify';
+import { z } from 'zod';
 import { prisma } from '../lib/prisma';
 import { authenticate } from '../auth';
 
@@ -29,6 +30,61 @@ export async function ordersRoutes(app: FastifyInstance) {
             return reply.send(orders);
         }
     );
+
+    app.patch(
+        '/orders/:id/status',
+        {
+            preHandler: authenticate,
+        },
+        async (request, reply) => {
+            const { id } = request.params as { id: string }
+
+            const bodySchema = z.object({
+                status: z.enum([
+                    'PENDENTE',
+                    'PAGO',
+                    'ENVIADO',
+                    'ENTREGUE',
+                    'CANCELADO',
+                ]),
+            })
+
+            const result = bodySchema.safeParse(request.body)
+
+            if (!result.success) {
+                return reply.status(400).send({
+                    message: 'Status inválido',
+                    errors: result.error.issues,
+                })
+            }
+
+            const { status } = result.data
+            
+            const order = await prisma.order.findFirst({
+                where: {
+                    id,
+                    userId: request.user.id,
+                },
+            })
+
+            if (!order) {
+                return reply.status(404).send({
+                    message: 'Pedido não encontrado',
+                })
+            }
+
+            const updatedOrder = await prisma.order.update({
+                where: {
+                    id,
+                },
+                data: {
+                    status,
+                },
+            })
+
+            return reply.send(updatedOrder)
+        }
+    )
 
     app.post(
         '/orders',

@@ -59,7 +59,8 @@ export async function ordersRoutes(app: FastifyInstance) {
             }
 
             const { status } = result.data
-            
+
+
             const order = await prisma.order.findFirst({
                 where: {
                     id,
@@ -70,6 +71,43 @@ export async function ordersRoutes(app: FastifyInstance) {
             if (!order) {
                 return reply.status(404).send({
                     message: 'Pedido não encontrado',
+                })
+            }
+
+            if (
+                order.status === 'PENDENTE' &&
+                status !== 'PAGO' &&
+                status !== 'CANCELADO'
+            ) {
+                return reply.status(400).send({
+                    message: 'Transição de status inválida',
+                })
+            }
+
+            if (
+                order.status === 'ENVIADO' &&
+                status !== 'ENTREGUE'
+            ) {
+                return reply.status(400).send({
+                    message: 'Transição de status inválida',
+                })
+            }
+
+            if (
+                order.status === 'PAGO' &&
+                status !== 'ENVIADO' &&
+                status !== 'CANCELADO'
+            ) {
+                return reply.status(400).send({
+                    message: 'Transição de status inválida',
+                })
+            }
+            if (
+                order.status === 'CANCELADO' ||
+                order.status === 'ENTREGUE'
+            ) {
+                return reply.status(400).send({
+                    message: 'Transição de status inválida',
                 })
             }
 

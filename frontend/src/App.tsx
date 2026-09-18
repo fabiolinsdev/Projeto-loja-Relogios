@@ -74,6 +74,28 @@ function App() {
     fetchOrders()
   }, [token])
 
+  function getOrderStatusLabel(status: string) {
+    switch (status) {
+      case 'PENDENTE':
+        return '🕐 Pendente'
+
+      case 'PAGO':
+        return '💳 Pago'
+
+      case 'ENVIADO':
+        return '📦 Enviado'
+
+      case 'ENTREGUE':
+        return '✅ Entregue'
+
+      case 'CANCELADO':
+        return '❌ Cancelado'
+
+      default:
+        return status
+    }
+  }
+
   function addToCart(product: Product) {
     setCart((currentCart) => {
       const existingItem = currentCart.find(
@@ -608,8 +630,8 @@ function App() {
                 {new Date(order.createdAt).toLocaleString('pt-BR')}
               </p>
 
-              <p>
-                Status: {order.status}
+              <p className={`order-status ${order.status.toLowerCase()}`}>
+                Status: {getOrderStatusLabel(order.status)}
               </p>
 
               {order.items.map((item) => (

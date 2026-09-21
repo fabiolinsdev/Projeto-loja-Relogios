@@ -620,7 +620,7 @@ function App() {
           <p>Nenhum pedido encontrado.</p>
         ) : (
           orders.map((order) => (
-            <div key={order.id}>
+            <div key={order.id} className="order-card">
               <h3>
                 Pedido {order.id}
               </h3>

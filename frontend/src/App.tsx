@@ -635,7 +635,7 @@ function App() {
               </p>
 
               {order.items.map((item) => (
-                <div key={item.id}>
+                <div key={item.id} className="order-item">
                   <p>
                     {item.product.name} — {item.quantity}x
                   </p>

@@ -518,8 +518,7 @@ function App() {
               />
             )}
 
-            <p>
-              Preço:{' '}
+            <p className="order-item-price">
               {product.price.toLocaleString('pt-BR', {
                 style: 'currency',
                 currency: 'BRL',
@@ -634,9 +633,11 @@ function App() {
                 Status: {getOrderStatusLabel(order.status)}
               </p>
 
+              <h4 className="order-items-title">Itens do pedido</h4>
+
               {order.items.map((item) => (
                 <div key={item.id} className="order-item">
-                  <p>
+                  <p className="order-item-name">
                     {item.product.name}
                   </p>
 

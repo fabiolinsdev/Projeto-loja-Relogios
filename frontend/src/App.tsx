@@ -621,7 +621,7 @@ function App() {
         ) : (
           orders.map((order) => (
             <div key={order.id} className="order-card">
-              <h3>
+              <h3 className="order-title">
                 Pedido {order.id}
               </h3>
 

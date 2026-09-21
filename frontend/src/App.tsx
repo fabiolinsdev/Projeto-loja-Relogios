@@ -307,6 +307,37 @@ function App() {
     setOrders(data)
   }
 
+  async function updateOrderStatus(
+    orderId: string,
+    status: string
+  ) {
+    if (!token) {
+      alert('Você precisa estar logado.')
+      return
+    }
+
+    const response = await fetch(
+      `http://localhost:3333/orders/${orderId}/status`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ status }),
+      }
+    )
+
+    if (!response.ok) {
+      const data = await response.json()
+
+      alert(data.message || 'Erro ao atualizar o status.')
+      return
+    }
+
+    await fetchOrders()
+  }
+
   function startEditingProduct(product: Product) {
     setEditingProductId(product.id)
     setProductName(product.name)
@@ -632,6 +663,19 @@ function App() {
               <p className={`order-status ${order.status.toLowerCase()}`}>
                 Status: {getOrderStatusLabel(order.status)}
               </p>
+
+              <select
+                defaultValue={order.status}
+                onChange={(event) =>
+                  updateOrderStatus(order.id, event.target.value)
+                }
+              >
+                <option value="PENDENTE">Pendente</option>
+                <option value="PAGO">Pago</option>
+                <option value="ENVIADO">Enviado</option>
+                <option value="ENTREGUE">Entregue</option>
+                <option value="CANCELADO">Cancelado</option>
+              </select>
 
               <h4 className="order-items-title">Itens do pedido</h4>
 

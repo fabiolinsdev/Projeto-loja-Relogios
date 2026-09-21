@@ -637,7 +637,11 @@ function App() {
               {order.items.map((item) => (
                 <div key={item.id} className="order-item">
                   <p>
-                    {item.product.name} — {item.quantity}x
+                    {item.product.name}
+                  </p>
+
+                  <p>
+                    Quantidade: {item.quantity}
                   </p>
                   <p>
                     Preço: {item.price.toLocaleString('pt-BR', {

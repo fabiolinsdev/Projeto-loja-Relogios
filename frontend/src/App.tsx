@@ -96,6 +96,22 @@ function App() {
     }
   }
 
+  function getAvailableStatuses(status: string) {
+    switch (status) {
+      case 'PENDENTE':
+        return ['PAGO', 'CANCELADO']
+
+      case 'PAGO':
+        return ['ENVIADO', 'CANCELADO']
+
+      case 'ENVIADO':
+        return ['ENTREGUE']
+
+      default:
+        return []
+    }
+  }
+
   function addToCart(product: Product) {
     setCart((currentCart) => {
       const existingItem = currentCart.find(
@@ -664,17 +680,26 @@ function App() {
                 Status: {getOrderStatusLabel(order.status)}
               </p>
 
+
+
               <select
+                className="order-status-select"
                 defaultValue={order.status}
+                disabled={getAvailableStatuses(order.status).length === 0}
                 onChange={(event) =>
                   updateOrderStatus(order.id, event.target.value)
                 }
               >
-                <option value="PENDENTE">Pendente</option>
-                <option value="PAGO">Pago</option>
-                <option value="ENVIADO">Enviado</option>
-                <option value="ENTREGUE">Entregue</option>
-                <option value="CANCELADO">Cancelado</option>
+
+                <option value={order.status}>
+                  {getOrderStatusLabel(order.status)}
+                </option>
+
+                {getAvailableStatuses(order.status).map((status) => (
+                  <option key={status} value={status}>
+                    {getOrderStatusLabel(status)}
+                  </option>
+                ))}
               </select>
 
               <h4 className="order-items-title">Itens do pedido</h4>

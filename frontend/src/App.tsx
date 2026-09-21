@@ -625,7 +625,7 @@ function App() {
                 Pedido {order.id}
               </h3>
 
-              <p>
+              <p className="order-date">
                 Data:{' '}
                 {new Date(order.createdAt).toLocaleString('pt-BR')}
               </p>
@@ -648,7 +648,7 @@ function App() {
                 </div>
               ))}
 
-              <strong>
+              <strong className="order-total">
                 Total:{' '}
                 {order.total.toLocaleString('pt-BR', {
                   style: 'currency',

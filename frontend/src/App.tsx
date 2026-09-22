@@ -299,7 +299,7 @@ function App() {
     }
 
     setCart([])
-
+    await fetchOrders()
     alert('Pedido criado com sucesso!')
   }
 

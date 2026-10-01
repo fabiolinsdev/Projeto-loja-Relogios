@@ -46,6 +46,7 @@ function App() {
   const [registerName, setRegisterName] = useState('')
   const [registerEmail, setRegisterEmail] = useState('')
   const [registerPassword, setRegisterPassword] = useState('')
+  const [productImageUrl, setProductImageUrl] = useState('')
 
   const [productName, setProductName] = useState('')
   const [productDescription, setProductDescription] = useState('')
@@ -195,6 +196,7 @@ function App() {
         description: productDescription,
         price: Number(productPrice),
         stock: Number(productStock),
+        imageUrl: productImageUrl,
         categoryId: productCategoryId,
       }),
     })
@@ -237,6 +239,7 @@ function App() {
           description: productDescription,
           price: Number(productPrice),
           stock: Number(productStock),
+          imageUrl: productImageUrl,
           categoryId: productCategoryId,
         }),
       }
@@ -524,6 +527,13 @@ function App() {
             placeholder="Estoque"
             value={productStock}
             onChange={(event) => setProductStock(event.target.value)}
+          />
+
+          <input
+            type="text"
+            placeholder="URL da imagem"
+            value={productImageUrl}
+            onChange={(event) => setProductImageUrl(event.target.value)}
           />
 
           <select

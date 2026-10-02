@@ -433,130 +433,168 @@ function App() {
 
   return (
     <>
-      <h2>Carrinho: {cart.length} produto(s)</h2>
+      <header className="site-header">
+        <div className="header-content">
+          <div className="logo">
+            <span className="logo-icon">⌚</span>
+            <span>Loja Relógios</span>
+          </div>
+
+          <nav className="header-nav">
+            <a href="#produtos">Produtos</a>
+            <a href="#carrinho">Carrinho ({cart.length})</a>
+            <a href="#pedidos">Meus pedidos</a>
+
+            {token && (
+              <button
+                type="button"
+                onClick={logout}
+                className="logout-button"
+              >
+                Sair
+              </button>
+            )}
+          </nav>
+        </div>
+      </header>
 
       {token && (
-        <div>
-          <p>Voçê está autenticado!</p>
-          <button type="button" onClick={logout}>
-            sair
-          </button>
+        <div className="authenticated-message">
+          <p>Você está autenticado!</p>
         </div>
       )}
 
-      <h1>Login</h1>
+      <section className="hero-banner">
+        <div className="hero-content">
+          <p className="hero-subtitle">ESTILO • ELEGÂNCIA • PRECISÃO</p>
 
-      <div>
-        <input
-          type="email"
-          placeholder="E-mail"
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-        />
+          <h1>Encontre o relógio perfeito</h1>
 
-        <input
-          type="password"
-          placeholder="Senha"
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-        />
+          <p className="hero-description">
+            Relógios para todos os momentos, com estilo e qualidade.
+          </p>
 
-        <button type="button" onClick={login}>
-          Entrar
-        </button>
-      </div>
+          <a href="#produtos" className="hero-button">
+            Ver relógios
+          </a>
+        </div>
+      </section>
 
-      <h1>Cadastro</h1>
+      <section className="auth-card">
+        <h2>Login</h2>
 
-      <div>
-        <input
-          type="text"
-          placeholder="Nome"
-          value={registerName}
-          onChange={(event) => setRegisterName(event.target.value)}
-        />
+        <div className="auth-fields">
+          <input
+            type="email"
+            placeholder="E-mail"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
 
-        <input
-          type="email"
-          placeholder="E-mail"
-          value={registerEmail}
-          onChange={(event) => setRegisterEmail(event.target.value)}
-        />
+          <input
+            type="password"
+            placeholder="Senha"
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
 
-        <input
-          type="password"
-          placeholder="Senha"
-          value={registerPassword}
-          onChange={(event) => setRegisterPassword(event.target.value)}
-        />
+          <button type="button" onClick={login}>
+            Entrar
+          </button>
+        </div>
+      </section>
 
-        <button type="button" onClick={register}>
-          Cadastrar
-        </button>
-      </div>
+      <section className="auth-card">
+        <h2>Cadastro</h2>
 
+        <div className="auth-fields">
+          <input
+            type="text"
+            placeholder="Nome"
+            value={registerName}
+            onChange={(event) => setRegisterName(event.target.value)}
+          />
+
+          <input
+            type="email"
+            placeholder="E-mail"
+            value={registerEmail}
+            onChange={(event) => setRegisterEmail(event.target.value)}
+          />
+
+          <input
+            type="password"
+            placeholder="Senha"
+            value={registerPassword}
+            onChange={(event) => setRegisterPassword(event.target.value)}
+          />
+
+          <button type="button" onClick={register}>
+            Cadastrar
+          </button>
+        </div>
+      </section>
       {token && (
-        <div>
-          <h1>
+        <section className="product-form-card">
+          <h2>
             {editingProductId ? 'Editar produto' : 'Cadastrar produto'}
-          </h1>
+          </h2>
 
-          <input
-            type="text"
-            placeholder="Nome do produto"
-            value={productName}
-            onChange={(event) => setProductName(event.target.value)}
-          />
+          <div className="product-form-fields">
+            <input
+              type="text"
+              placeholder="Nome do produto"
+              value={productName}
+              onChange={(event) => setProductName(event.target.value)}
+            />
 
-          <input
-            type="text"
-            placeholder="Descrição"
-            value={productDescription}
-            onChange={(event) => setProductDescription(event.target.value)}
-          />
+            <input
+              type="text"
+              placeholder="Descrição"
+              value={productDescription}
+              onChange={(event) => setProductDescription(event.target.value)}
+            />
 
-          <input
-            type="number"
-            placeholder="Preço"
-            value={productPrice}
-            onChange={(event) => setProductPrice(event.target.value)}
-          />
+            <input
+              type="number"
+              placeholder="Preço"
+              value={productPrice}
+              onChange={(event) => setProductPrice(event.target.value)}
+            />
 
-          <input
-            type="number"
-            placeholder="Estoque"
-            value={productStock}
-            onChange={(event) => setProductStock(event.target.value)}
-          />
+            <input
+              type="number"
+              placeholder="Estoque"
+              value={productStock}
+              onChange={(event) => setProductStock(event.target.value)}
+            />
 
-          <input
-            type="text"
-            placeholder="URL da imagem"
-            value={productImageUrl}
-            onChange={(event) => setProductImageUrl(event.target.value)}
-          />
+            <input
+              type="text"
+              placeholder="URL da imagem"
+              value={productImageUrl}
+              onChange={(event) => setProductImageUrl(event.target.value)}
+            />
 
-          <select
-            value={productCategoryId}
-            onChange={(event) => setProductCategoryId(event.target.value)}
-          >
-            <option value="">Selecione uma categoria</option>
+            <select
+              value={productCategoryId}
+              onChange={(event) => setProductCategoryId(event.target.value)}
+            >
+              <option value="">Selecione uma categoria</option>
+              <option value="cmt4crivr000019d0hrzmyiuu">Casual</option>
+            </select>
 
-            <option value="cmt4crivr000019d0hrzmyiuu">
-              Casual
-            </option>
-          </select>
-
-          <button
-            type="button"
-            onClick={editingProductId ? updateProduct : createProduct}
-          >
-            {editingProductId ? 'Salvar alterações' : 'Criar produto'}
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={editingProductId ? updateProduct : createProduct}
+            >
+              {editingProductId ? 'Salvar alterações' : 'Criar produto'}
+            </button>
+          </div>
+        </section>
       )}
 
-      <h1>Produtos</h1>
+      <h1 id="produtos">Produtos</h1>
 
       <div className="products-grid">
         {products.map((product) => (
@@ -571,7 +609,7 @@ function App() {
               <img
                 src={product.imageUrl}
                 alt={product.name}
-                width="200"
+                className="product-image"
               />
             )}
 
@@ -613,63 +651,66 @@ function App() {
         ))}
       </div>
 
-      <h2>Carrinho</h2>
+      <section className="cart-card">
 
-      {cart.length === 0 ? (
-        <p>Seu carrinho está vazio.</p>
-      ) : (
-        <div>
-          {cart.map((item) => (
-            <div key={item.id}>
-              <strong>{item.name}</strong>
+        <h2 id="carrinho">Carrinho</h2>
 
-              <div>
-                <button
-                  type="button"
-                  onClick={() => decreaseQuantity(item.id)}
-                >
-                  −
-                </button>
+        {cart.length === 0 ? (
+          <p>Seu carrinho está vazio.</p>
+        ) : (
+          <div>
+            {cart.map((item) => (
+              <div key={item.id}>
+                <strong>{item.name}</strong>
 
-                <span> {item.quantity} </span>
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => decreaseQuantity(item.id)}
+                  >
+                    −
+                  </button>
 
-                <button
-                  type="button"
-                  onClick={() => increaseQuantity(item.id)}
-                >
-                  +
-                </button>
+                  <span> {item.quantity} </span>
 
-                <button
-                  type="button"
-                  onClick={() => removeFromCart(item.id)}
-                >
-                  Remover
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => increaseQuantity(item.id)}
+                  >
+                    +
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => removeFromCart(item.id)}
+                  >
+                    Remover
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
 
-          <p>
-            <strong>
-              Total:{' '}
-              {cartTotal.toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-              })}
-            </strong>
-          </p>
+            <p>
+              <strong>
+                Total:{' '}
+                {cartTotal.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                })}
+              </strong>
+            </p>
 
-          <button
-            type="button"
-            onClick={createOrder}
-          >
-            Finalizar compra
-          </button>
-        </div>
-      )}
+            <button
+              type="button"
+              onClick={createOrder}
+            >
+              Finalizar compra
+            </button>
+          </div>
+        )}
+      </section>
 
-      <section>
+      <section id="pedidos" className="orders-section">
         <h2>Histórico de pedidos</h2>
 
         {orders.length === 0 ? (

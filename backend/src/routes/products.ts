@@ -44,6 +44,7 @@ export async function productsRoutes(app: FastifyInstance) {
             const { id } = request.params as { id: string };
 
             const result = updateProductSchema.safeParse(request.body);
+            
 
             if (!result.success) {
                 return reply.status(400).send({

@@ -599,11 +599,6 @@ function App() {
       <div className="products-grid">
         {products.map((product) => (
           <div key={product.id} className="product-card">
-            <h2>{product.name}</h2>
-
-            <p>Categoria: {product.category.name}</p>
-
-            <p>{product.description}</p>
 
             {product.imageUrl && (
               <img
@@ -612,6 +607,12 @@ function App() {
                 className="product-image"
               />
             )}
+
+            <h2>{product.name}</h2>
+
+            <p>Categoria: {product.category.name}</p>
+
+            <p>{product.description}</p>
 
             <p className="order-item-price">
               {product.price.toLocaleString('pt-BR', {
@@ -628,6 +629,7 @@ function App() {
 
             <button
               type="button"
+              className="add-to-cart-button"
               onClick={() => addToCart(product)}
               disabled={product.stock === 0}
             >
@@ -636,6 +638,7 @@ function App() {
 
             <button
               type="button"
+              className="edit-product-button"
               onClick={() => startEditingProduct(product)}
             >
               Editar produto
@@ -643,6 +646,7 @@ function App() {
 
             <button
               type="button"
+              className="delete-product-button"
               onClick={() => deleteProduct(product.id)}
             >
               Excluir produto

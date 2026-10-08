@@ -107,7 +107,7 @@ export function answerStoreQuestion(
   if (
     /^(oi|ola|hey|e ai|eai|bom dia|boa tarde|boa noite|tudo bem)\b/.test(q)
   ) {
-    return 'Olá! Sou o assistente da Loja Relógios. Posso falar dos modelos, preços, estoque e do seu carrinho. O que você quer saber?'
+    return 'Olá! Sou o Virtus. Posso falar dos modelos, preços, estoque e do seu carrinho. O que você quer saber?'
   }
 
   const asksCart =

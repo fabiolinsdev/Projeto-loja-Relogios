@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import { StoreAssistant } from './StoreAssistant'
 
 type Category = {
   id: string
@@ -713,6 +714,12 @@ function App() {
           </div>
         )}
       </section>
+
+      <StoreAssistant
+        products={products}
+        cart={cart}
+        loggedIn={Boolean(token)}
+      />
 
       <section id="pedidos" className="orders-section">
         <h2>Histórico de pedidos</h2>

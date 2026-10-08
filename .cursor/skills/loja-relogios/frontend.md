@@ -21,6 +21,8 @@ Funções existentes para reutilizar: `login`, `register`, `logout`, `createProd
 
 ## UI / CSS
 
+Assistente da loja: `StoreAssistant` (canto inferior direito). Responde com catálogo e carrinho atuais via `answerStoreQuestion` em `storeAssistant.ts`. Abre ao entrar; minimizar deixa o botão “Ajuda”.
+
 Ancoras do header: `#produtos`, `#carrinho`, `#pedidos`.
 
 Cards: `auth-card`, `product-form-card`, `product-card`, `cart-card`, `order-card`, `hero-banner`, `site-header`.

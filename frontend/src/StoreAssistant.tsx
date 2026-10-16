@@ -1,4 +1,5 @@
-import { FormEvent, useEffect, useRef, useState } from 'react'
+import { type FormEvent, useEffect, useRef, useState } from 'react'
+
 import {
   answerStoreQuestion,
   assistantWelcome,

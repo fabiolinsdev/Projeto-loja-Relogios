@@ -59,9 +59,12 @@ function App() {
 
   const [token, setToken] = useState(localStorage.getItem('token'))
 
+  // 🌟 LINK CORRETO DA SUA API DO RENDER CENTRALIZADO AQUI:
+  const API_URL = 'https://api-loja-relogio.onrender.com'
 
+  // 1. Listagem de produtos
   useEffect(() => {
-    fetch('http://localhost:3333/products', {
+    fetch(`${API_URL}/products`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -80,19 +83,14 @@ function App() {
     switch (status) {
       case 'PENDENTE':
         return '🕐 Pendente'
-
       case 'PAGO':
         return '💳 Pago'
-
       case 'ENVIADO':
         return '📦 Enviado'
-
       case 'ENTREGUE':
         return '✅ Entregue'
-
       case 'CANCELADO':
         return '❌ Cancelado'
-
       default:
         return status
     }
@@ -102,13 +100,10 @@ function App() {
     switch (status) {
       case 'PENDENTE':
         return ['PAGO', 'CANCELADO']
-
       case 'PAGO':
         return ['ENVIADO', 'CANCELADO']
-
       case 'ENVIADO':
         return ['ENTREGUE']
-
       default:
         return []
     }
@@ -116,18 +111,12 @@ function App() {
 
   function addToCart(product: Product) {
     setCart((currentCart) => {
-      const existingItem = currentCart.find(
-        (item) => item.id === product.id
-      )
-
+      const existingItem = currentCart.find((item) => item.id === product.id)
       if (existingItem) {
         return currentCart.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         )
       }
-
       return [...currentCart, { ...product, quantity: 1 }]
     })
   }
@@ -138,7 +127,7 @@ function App() {
         item.id === productId && item.quantity < item.stock
           ? { ...item, quantity: item.quantity + 1 }
           : item
-      )
+    )
     )
   }
 
@@ -146,30 +135,24 @@ function App() {
     setCart((currentCart) =>
       currentCart
         .map((item) =>
-          item.id === productId
-            ? { ...item, quantity: item.quantity - 1 }
-            : item
+          item.id === productId ? { ...item, quantity: item.quantity - 1 } : item
         )
         .filter((item) => item.quantity > 0)
     )
   }
 
   function removeFromCart(productId: string) {
-    setCart((currentCart) =>
-      currentCart.filter((item) => item.id !== productId)
-    )
+    setCart((currentCart) => currentCart.filter((item) => item.id !== productId))
   }
 
+  // 2. Função de Login
   async function login() {
-    const response = await fetch('http://localhost:3333/login', {
+    const response = await fetch(`${API_URL}/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
+      body: JSON.stringify({ email, password }),
     })
 
     const data = await response.json()
@@ -181,12 +164,12 @@ function App() {
 
     localStorage.setItem('token', data.token)
     setToken(data.token)
-
     alert('Login realizado com sucesso!')
   }
 
+  // 3. Criar Produto
   async function createProduct() {
-    const response = await fetch('http://localhost:3333/products', {
+    const response = await fetch(`${API_URL}/products`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -210,43 +193,33 @@ function App() {
     }
 
     alert('Produto criado com sucesso!')
-
     setProductName('')
     setProductDescription('')
     setProductPrice('')
     setProductStock('')
     setProductCategoryId('')
-
     setProducts((currentProducts) => [...currentProducts, data])
   }
 
+  // 4. Atualizar Produto
   async function updateProduct() {
+    if (!editingProductId) return
 
-
-    if (!editingProductId) {
-      return
-    }
-
-    const response = await fetch(
-      `http://localhost:3333/products/${editingProductId}`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          name: productName,
-          description: productDescription,
-          price: Number(productPrice),
-          stock: Number(productStock),
-          imageUrl: productImageUrl,
-          categoryId: productCategoryId,
-        }),
-      }
-
-    )
-
+    const response = await fetch(`${API_URL}/products/${editingProductId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name: productName,
+        description: productDescription,
+        price: Number(productPrice),
+        stock: Number(productStock),
+        imageUrl: productImageUrl,
+        categoryId: productCategoryId,
+      }),
+    })
 
     const data = await response.json()
 
@@ -256,7 +229,6 @@ function App() {
     }
 
     alert('Produto atualizado com sucesso!')
-
     setProducts((currentProducts) =>
       currentProducts.map((product) =>
         product.id === editingProductId ? data : product
@@ -271,6 +243,7 @@ function App() {
     setProductCategoryId('')
   }
 
+  // 5. Criar Pedido (Checkout)
   async function createOrder() {
     if (!token) {
       alert('Você precisa estar logado para finalizar a compra.')
@@ -287,7 +260,7 @@ function App() {
       quantity: item.quantity,
     }))
 
-    const response = await fetch('http://localhost:3333/orders', {
+    const response = await fetch(`${API_URL}/orders`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -307,50 +280,40 @@ function App() {
     alert('Pedido criado com sucesso!')
   }
 
+  // 6. Buscar Pedidos
   async function fetchOrders() {
-    if (!token) {
-      return
-    }
+    if (!token) return
 
-    const response = await fetch('http://localhost:3333/orders', {
+    const response = await fetch(`${API_URL}/orders`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
 
-    if (!response.ok) {
-      return
-    }
+    if (!response.ok) return
 
     const data = await response.json()
-
     setOrders(data)
   }
 
-  async function updateOrderStatus(
-    orderId: string,
-    status: string
-  ) {
+  // 7. Atualizar Status do Pedido
+  async function updateOrderStatus(orderId: string, status: string) {
     if (!token) {
       alert('Você precisa estar logado.')
       return
     }
 
-    const response = await fetch(
-      `http://localhost:3333/orders/${orderId}/status`,
-      {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ status }),
-      }
-    )
+    const response = await fetch(`${API_URL}/orders/${orderId}/status`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ status }),
+    })
 
     if (!response.ok) {
       const data = await response.json()
-
       alert(data.message || 'Erro ao atualizar o status.')
       return
     }
@@ -367,16 +330,14 @@ function App() {
     setProductCategoryId(product.categoryId)
   }
 
+  // 8. CORRIGIDO: Deletar Produto agora usa o API_URL
   async function deleteProduct(productId: string) {
-    const response = await fetch(
-      `http://localhost:3333/products/${productId}`,
-      {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
+    const response = await fetch(`${API_URL}/products/${productId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
 
     if (!response.ok) {
       const data = await response.json()
@@ -385,14 +346,14 @@ function App() {
     }
 
     alert('Produto excluído com sucesso!')
-
     setProducts((currentProducts) =>
       currentProducts.filter((product) => product.id !== productId)
     )
   }
 
+  // 9. CORRIGIDO: Registro de Usuário agora usa o API_URL
   async function register() {
-    const response = await fetch('http://localhost:3333/users', {
+    const response = await fetch(`${API_URL}/users`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -412,7 +373,6 @@ function App() {
     }
 
     alert('Usuário cadastrado com sucesso!')
-
     setRegisterName('')
     setRegisterEmail('')
     setRegisterPassword('')
@@ -421,21 +381,17 @@ function App() {
   function logout() {
     localStorage.removeItem('token')
     setToken(null)
-
     alert('Logout realizado com sucesso!')
   }
 
-  const cartTotal = cart.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  )
-
-
+  const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0)
 
   return (
     <>
       <header className="site-header">
         <div className="header-content">
+          {/* O restante do seu HTML/JSX do return continua aqui igualzinho */}
+
           <div className="logo">
             <span className="logo-icon">⌚</span>
             <span>Loja Relógios</span>
